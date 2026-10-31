@@ -10,6 +10,7 @@ import logging
 from datetime import datetime, timezone, timedelta
 from difflib import SequenceMatcher
 from gsa_grouping import same_event
+from gsa_classifier import classify
 from urllib.parse import urlparse
 
 import feedparser
@@ -68,28 +69,6 @@ def db():
     )""")
     conn.commit()
     return conn
-
-
-def classify(title, summary):
-    title_text = re.sub(r"\s+", " ", title).strip().lower()
-    text = re.sub(r"\s+", " ", f"{title} {summary}").strip().lower()
-
-    # Caution markers are checked in the headline only.
-    headline_caution = [
-        "could", "might", "would", "if", "warns", "warning",
-        "threatens", "threat", "plans to", "prepares to",
-        "preparing to", "expected to", "unlikely",
-        "denies", "denied", "not confirmed", "unconfirmed",
-        "false claim", "rumour", "rumor"
-    ]
-    if any(re.search(r"\b" + re.escape(term) + r"\b", title_text)
-           for term in headline_caution):
-        return None
-
-    for category, level, phrases in RULES:
-        if any(phrase in text for phrase in phrases):
-            return category, level
-    return None
 
 
 def normalized_title(title):
