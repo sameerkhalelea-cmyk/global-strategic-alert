@@ -21,7 +21,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
-        buildConfigField("String", "API_BASE_URL", "\"https://YOUR-BACKEND-HOST/\"")
+        buildConfigField("String", "API_BASE_URL", "\"https://global-strategic-alert.onrender.com/\"")
     }
     buildFeatures { compose = true; buildConfig = true }
 }
